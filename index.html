@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BitWerker — PC-Service Aachen | Reparatur, Aufbau, Beratung</title>
+<meta name="description" content="PC- und Laptop-Reparatur, Aufbau & Installation vor Ort in Aachen & Umgebung. Kostenlose Fehlerdiagnose, faire Festpreise. Von Bol Daudov / BitWerker.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #12161A;
+    --bg-raised: #191F25;
+    --panel: #1D242B;
+    --line: #2A333B;
+    --text: #E7ECEF;
+    --text-muted: #8C99A4;
+    --amber: #FF8A3D;
+    --amber-dim: #7A4A26;
+    --green: #4FDB8F;
+    --red: #FF6B6B;
+    --radius: 3px;
+    --mono: 'JetBrains Mono', ui-monospace, monospace;
+    --display: 'Space Grotesk', sans-serif;
+    --body: 'Inter', sans-serif;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:var(--body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  img{ max-width:100%; display:block; }
+
+  .wrap{
+    max-width:960px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  ::selection{ background:var(--amber); color:#14181C; }
+
+  /* subtle circuit-trace background, whole page */
+  body{
+    background-image:
+      linear-gradient(var(--bg) 0%, var(--bg) 100%),
+      repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.02) 39px, rgba(255,255,255,0.02) 40px);
+  }
+
+  /* ---------- header ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(18,22,26,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:16px 24px;
+  }
+  .logo{
+    font-family:var(--mono);
+    font-weight:600;
+    font-size:16px;
+    letter-spacing:0.02em;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .logo .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:var(--green);
+    box-shadow:0 0 8px var(--green);
+    flex-shrink:0;
+  }
+  .nav-links{
+    display:flex;
+    gap:28px;
+    font-size:14px;
+    color:var(--text-muted);
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-cta{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--amber);
+    border:1px solid var(--amber-dim);
+    padding:7px 14px;
+    border-radius:var(--radius);
+    white-space:nowrap;
+  }
+  .nav-cta:hover{ background:rgba(255,138,61,0.08); }
+  @media (max-width:640px){
+    .nav-links{ display:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding:88px 0 64px;
+    display:grid;
+    grid-template-columns:1.1fr 1fr;
+    gap:48px;
+    align-items:center;
+  }
+  @media (max-width:800px){
+    .hero{ grid-template-columns:1fr; padding:56px 0 40px; }
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--green);
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:20px; height:1px;
+    background:var(--green);
+  }
+  h1{
+    font-family:var(--display);
+    font-weight:700;
+    font-size:clamp(32px, 5vw, 48px);
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin-bottom:20px;
+  }
+  h1 .accent{ color:var(--amber); }
+  .hero p{
+    color:var(--text-muted);
+    font-size:16.5px;
+    max-width:46ch;
+    margin-bottom:32px;
+  }
+  .cta-row{
+    display:flex;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .btn{
+    font-family:var(--mono);
+    font-size:14px;
+    font-weight:500;
+    padding:13px 22px;
+    border-radius:var(--radius);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    transition:transform 0.15s ease, background 0.15s ease;
+  }
+  .btn:hover{ transform:translateY(-1px); }
+  .btn-primary{
+    background:var(--amber);
+    color:#171310;
+  }
+  .btn-primary:hover{ background:#ff9c5c; }
+  .btn-ghost{
+    border:1px solid var(--line);
+    color:var(--text);
+  }
+  .btn-ghost:hover{ border-color:var(--text-muted); }
+
+  /* terminal signature element */
+  .terminal{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+    box-shadow:0 20px 60px -20px rgba(0,0,0,0.6);
+  }
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    padding:11px 14px;
+    background:var(--bg-raised);
+    border-bottom:1px solid var(--line);
+  }
+  .terminal-bar span{
+    width:9px; height:9px; border-radius:50%;
+    background:#3A444C;
+  }
+  .terminal-bar .label{
+    margin-left:8px;
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--text-muted);
+  }
+  .terminal-body{
+    padding:20px 18px 22px;
+    font-family:var(--mono);
+    font-size:13px;
+    line-height:1.9;
+  }
+  .terminal-body .line{ display:flex; gap:8px; }
+  .terminal-body .prompt{ color:var(--green); flex-shrink:0; }
+  .terminal-body .ok{ color:var(--green); }
+  .terminal-body .muted{ color:var(--text-muted); }
+  .terminal-body .cursor{
+    display:inline-block;
+    width:7px; height:14px;
+    background:var(--amber);
+    animation:blink 1.1s steps(1) infinite;
+    vertical-align:text-bottom;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+  @media (prefers-reduced-motion: reduce){
+    .cursor{ animation:none; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ---------- section shared ---------- */
+  section{ padding:64px 0; border-top:1px solid var(--line); }
+  .section-head{ margin-bottom:36px; }
+  .section-head .eyebrow{ margin-bottom:10px; }
+  h2{
+    font-family:var(--display);
+    font-weight:600;
+    font-size:clamp(24px, 3.4vw, 30px);
+    letter-spacing:-0.01em;
+  }
+  .section-head p{ color:var(--text-muted); margin-top:8px; max-width:56ch; }
+
+  /* ---------- pricing / services table ---------- */
+  .spec-table{
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .spec-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    gap:16px;
+    padding:16px 20px;
+    border-bottom:1px solid var(--line);
+    background:var(--bg-raised);
+  }
+  .spec-row:last-child{ border-bottom:none; }
+  .spec-row:nth-child(odd){ background:var(--panel); }
+  .spec-name{
+    font-size:15px;
+    font-weight:500;
+  }
+  .spec-note{
+    display:block;
+    font-size:13px;
+    color:var(--text-muted);
+    font-weight:400;
+    margin-top:3px;
+  }
+  .spec-price{
+    font-family:var(--mono);
+    font-size:14.5px;
+    color:var(--text);
+    white-space:nowrap;
+    text-align:right;
+  }
+  .spec-price.free{
+    color:var(--green);
+    font-weight:600;
+  }
+  .spec-hint{
+    margin-top:14px;
+    font-size:13.5px;
+    color:var(--text-muted);
+  }
+
+  /* ---------- process steps ---------- */
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:20px;
+  }
+  @media (max-width:800px){
+    .steps{ grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:520px){
+    .steps{ grid-template-columns:1fr; }
+  }
+  .step{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:20px 18px;
+    position:relative;
+  }
+  .step-num{
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--amber);
+    margin-bottom:12px;
+  }
+  .step h3{
+    font-family:var(--display);
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:8px;
+  }
+  .step p{
+    font-size:13.5px;
+    color:var(--text-muted);
+  }
+
+  /* ---------- notices ---------- */
+  .notice-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:700px){
+    .notice-grid{ grid-template-columns:1fr; }
+  }
+  .notice{
+    border:1px solid var(--amber-dim);
+    background:rgba(255,138,61,0.06);
+    border-radius:6px;
+    padding:18px 20px;
+    font-size:14px;
+  }
+  .notice .tag{
+    font-family:var(--mono);
+    font-size:11.5px;
+    color:var(--amber);
+    letter-spacing:0.06em;
+    display:block;
+    margin-bottom:8px;
+  }
+  .notice p{ color:var(--text); }
+  .notice.calm{
+    border-color:var(--line);
+    background:var(--panel);
+  }
+  .notice.calm .tag{ color:var(--text-muted); }
+
+  /* ---------- contact / footer ---------- */
+  .contact{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:40px;
+    align-items:start;
+  }
+  @media (max-width:700px){
+    .contact{ grid-template-columns:1fr; }
+  }
+  .contact-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:26px;
+  }
+  .contact-card h3{
+    font-family:var(--display);
+    font-size:19px;
+    margin-bottom:4px;
+  }
+  .contact-card .role{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-bottom:20px;
+  }
+  .contact-row{
+    display:flex;
+    justify-content:space-between;
+    padding:11px 0;
+    border-top:1px solid var(--line);
+    font-size:14px;
+  }
+  .contact-row:first-of-type{ border-top:none; }
+  .contact-row .k{ color:var(--text-muted); }
+  .contact-row .v{ text-align:right; font-family:var(--mono); font-size:13px; }
+  .contact-row .v a:hover{ color:var(--amber); }
+  .badges{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:18px;
+  }
+  .badge{
+    font-family:var(--mono);
+    font-size:11px;
+    padding:5px 10px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    color:var(--text-muted);
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:36px 0 60px;
+    font-size:12.5px;
+    color:var(--text-muted);
+  }
+  footer .legal{
+    max-width:70ch;
+    line-height:1.7;
+  }
+  footer .legal strong{ color:var(--text); font-weight:500; }
+  footer .foot-bottom{
+    margin-top:24px;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav wrap">
+    <div class="logo"><span class="dot"></span>BITWERKER_</div>
+    <nav class="nav-links">
+      <a href="#leistungen">Leistungen</a>
+      <a href="#ablauf">Ablauf</a>
+      <a href="#hinweise">Hinweise</a>
+      <a href="#kontakt">Kontakt</a>
+    </nav>
+    <a class="nav-cta" href="tel:+4917630770739">01763 0770739</a>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" style="border-top:none;">
+    <div>
+      <div class="eyebrow">PC-Service · Aachen &amp; Umgebung</div>
+      <h1>Dein Rechner streikt?<br>Ich komm <span class="accent">vorbei</span>.</h1>
+      <p>Reparatur, Aufbau und Installation direkt bei dir zuhause. Kostenlose Fehlerdiagnose, transparente Festpreise, keine versteckten Kosten.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="tel:+4917630770739">→ Jetzt anrufen</a>
+        <a class="btn btn-ghost" href="mailto:business.daudov@protonmail.com">Nachricht schreiben</a>
+      </div>
+    </div>
+
+    <div class="terminal" aria-hidden="true">
+      <div class="terminal-bar">
+        <span></span><span></span><span></span>
+        <span class="label">diagnose.sh</span>
+      </div>
+      <div class="terminal-body">
+        <div class="line"><span class="prompt">$</span><span>pc-check --status</span></div>
+        <div class="line"><span class="muted">&gt;</span><span class="muted">Gerät wird geprüft ...</span></div>
+        <div class="line"><span class="muted">&gt;</span><span>Fehlerdiagnose: <span class="ok">kostenlos, 30 Min.</span></span></div>
+        <div class="line"><span class="muted">&gt;</span><span>Kostenvoranschlag: <span class="ok">transparent &amp; fair</span></span></div>
+        <div class="line"><span class="muted">&gt;</span><span>Anfahrt: <span class="ok">Aachen &amp; Umgebung</span></span></div>
+        <div class="line"><span class="prompt">$</span><span>&nbsp;<span class="cursor"></span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="leistungen" class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Leistungen &amp; Preise</div>
+      <h2>Klare Preise, keine Überraschungen</h2>
+      <p>Von der ersten Diagnose bis zum fertigen Gaming-PC — hier siehst du, was auf dich zukommt.</p>
+    </div>
+
+    <div class="spec-table">
+      <div class="spec-row">
+        <span class="spec-name">Fehlerdiagnose<span class="spec-note">Erste Einschätzung vor Ort, unverbindlich</span></span>
+        <span class="spec-price free">kostenlos · 30 Min.</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-name">Reparatur<span class="spec-note">Nach Aufwand, vorher abgesprochen</span></span>
+        <span class="spec-price">20 €/Std.</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-name">Windows-Neuinstallation<span class="spec-note">Inkl. Treiber, Updates &amp; Virenschutz</span></span>
+        <span class="spec-price">60 € Pauschale</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-name">PC-Zusammenbau<span class="spec-note">Ohne Hardware, je nach Komplexität</span></span>
+        <span class="spec-price">100–150 € Pauschale</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-name">Hardware-Upgrade / Einbau<span class="spec-note">RAM, SSD, Grafikkarte &amp; mehr</span></span>
+        <span class="spec-price">50 € Pauschale</span>
+      </div>
+      <div class="spec-row">
+        <span class="spec-name">Kaufberatung Gaming-PC<span class="spec-note">Individuelle Empfehlung nach Budget</span></span>
+        <span class="spec-price">20 €/Std.</span>
+      </div>
+    </div>
+    <p class="spec-hint">Weitere Leistungen auf Anfrage — einfach anrufen und fragen.</p>
+  </section>
+
+  <section id="ablauf" class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">So läuft's ab</div>
+      <h2>Vier Schritte bis zum laufenden Rechner</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">01</div>
+        <h3>Problem schildern</h3>
+        <p>Per Chat, Telefon oder mit ein paar Fotos — sag mir, was los ist.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <h3>Kostenvoranschlag</h3>
+        <p>Du bekommst von mir eine transparente, faire Einschätzung.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">03</div>
+        <h3>Zustimmung</h3>
+        <p>Mit deinem Okay geht's los — schriftlich festgehalten.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">04</div>
+        <h3>Zahlung</h3>
+        <p>Bar oder per Überweisung. Rechnung &amp; Quittung inklusive.</p>
+      </div>
+    </div>
+    <p class="spec-hint">Findet sich unterwegs ein weiterer Schaden, sage ich sofort Bescheid — wir entscheiden gemeinsam, wie es weitergeht.</p>
+  </section>
+
+  <section id="hinweise" class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Wichtige Hinweise</div>
+      <h2>Bevor's losgeht</h2>
+    </div>
+    <div class="notice-grid">
+      <div class="notice">
+        <span class="tag">Backup</span>
+        <p>Bitte erstelle vor jeder Reparatur selbst ein Backup deiner Daten (Bilder, Dokumente etc.).</p>
+      </div>
+      <div class="notice">
+        <span class="tag">Anfahrt</span>
+        <p>Ab ca. 45 Minuten Anfahrt: 15 € — danach 5 € je weitere 15 Minuten.</p>
+      </div>
+      <div class="notice">
+        <span class="tag">Gewährleistung</span>
+        <p>Keine Garantie für Folgeschäden bei bereits defekten oder geöffneten Geräten.</p>
+      </div>
+      <div class="notice calm">
+        <span class="tag">Gut zu wissen</span>
+        <p>Gewerblich mit Rechnung. Nichtraucher. Erreichbar Mo–Fr, 13–19 Uhr.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="kontakt" class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Kontakt</div>
+      <h2>Melde dich einfach</h2>
+    </div>
+    <div class="contact">
+      <div class="contact-card">
+        <h3>Bol Daudov</h3>
+        <div class="role">BitWerker — Aachen &amp; Umgebung</div>
+        <div class="contact-row">
+          <span class="k">Telefon</span>
+          <span class="v"><a href="tel:+4917630770739">0176 30770739</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="k">Erreichbar</span>
+          <span class="v">Mo–Fr, 13–19 Uhr</span>
+        </div>
+        <div class="contact-row">
+          <span class="k">E-Mail</span>
+          <span class="v"><a href="mailto:business.daudov@protonmail.com">business.daudov@protonmail.com</a></span>
+        </div>
+        <div class="contact-row">
+          <span class="k">Standort</span>
+          <span class="v">Rathausstraße 5A<br>52072 Aachen-Laurensberg</span>
+        </div>
+        <div class="badges">
+          <span class="badge">TOP Zufriedenheit</span>
+          <span class="badge">Freundlich</span>
+          <span class="badge">Zuverlässig</span>
+        </div>
+      </div>
+
+      <div class="terminal">
+        <div class="terminal-bar">
+          <span></span><span></span><span></span>
+          <span class="label">contact.sh</span>
+        </div>
+        <div class="terminal-body">
+          <div class="line"><span class="prompt">$</span><span>./anfrage --senden</span></div>
+          <div class="line"><span class="muted">&gt;</span><span>Kurz schildern, was nicht (mehr) geht.</span></div>
+          <div class="line"><span class="muted">&gt;</span><span>Antwort meist innerhalb eines Werktags.</span></div>
+          <div class="line" style="margin-top:14px;">
+            <a class="btn btn-primary" href="mailto:business.daudov@protonmail.com" style="font-size:12.5px; padding:10px 16px;">E-Mail schreiben →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <div class="legal">
+    <strong>Impressum</strong><br>
+    Bol Daudov — BitWerker, Rathausstraße 5A, 52072 Aachen<br>
+    E-Mail: business.daudov@protonmail.com · Mobil: 0176 30770739 (Mo–Fr, 13–19 Uhr)<br><br>
+    Einzelunternehmen (Kleingewerbe). Gewerbeanmeldung nach § 14 GewO bei der Stadt Aachen.
+    Gemäß § 19 UStG wird keine Umsatzsteuer ausgewiesen.<br><br>
+    Auf verkaufte oder verbaute Hardware gilt die gesetzliche Gewährleistung gemäß § 437 BGB.
+    Bei gebrauchten Teilen ist diese auf 12 Monate beschränkt. Dienstleistungen werden nach
+    bestem Wissen und Gewissen erbracht; für Schäden im Rahmen der Tätigkeit greift die
+    Betriebshaftpflichtversicherung.
+  </div>
+  <div class="foot-bottom">
+    <span>© 2026 BitWerker · Bol Daudov</span>
+    <span>Aachen &amp; Umgebung</span>
+  </div>
+</footer>
+
+</body>
+</html>
